@@ -30,7 +30,7 @@ class RightPlayer(GamePlayer):
         keys = key.get_pressed()
         if keys[K_UP] and self.rect.y > 0:
             self.rect.y -= self.step
-        elif keys[k_DOWN] and self.rect.y < 500 - self.height:
+        elif keys[K_DOWN] and self.rect.y < 500 - self.height:
             self.rect.y += self.step
 
 window = display.set_mode((700, 500))
@@ -41,15 +41,29 @@ background = transform.scale(
 fps = 60
 clock = time.Clock()
 game = True
-player_1 = LeftPlayer('bobr.jpg', 40, 80, 40, 210, 10)
+player_1 = LeftPlayer('Praymougolnik.png', 40, 80, 40, 210, 10)
+player_2 = RightPlayer('Praymougolnik.png', 40, 80, 620, 210, 10)
+player_2.image = transform.rotate(player_2.image, 180)
+ball = GamePlayer('ball.png', 20, 20, 340, 240, 10)
+dx = 3
+dy = 3
 game = True
 while game:
     for e in event.get():
         if e.type == QUIT:
             game = False
-        window.blit(background, (0, 0))
-        player_1.update()
-        player_1.reset()
-        display.update()
-        clock.tick(fps)
-        
+    if ball.rect.x >= 680 or ball.rect.x <= 0:
+        dx *= -1
+    if ball.rect.y >= 480 or ball.rect.y <= 0:
+        dy *= -1
+    ball.rect.x += dx
+    ball.rect.y += dy
+    window.blit(background, (0, 0))
+    player_1.update()
+    player_1.reset()
+    player_2.update()
+    player_2.reset()
+    ball.reset()
+    display.update()
+    clock.tick(fps)
+    
